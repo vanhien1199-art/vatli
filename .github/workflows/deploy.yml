@@ -1,0 +1,25 @@
+name: Deploy Cloudflare Worker
+
+on:
+  # Chạy workflow này mỗi khi có push lên nhánh 'main'
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      # Bước 1: Lấy code từ repository về
+      - uses: actions/checkout@v3
+
+      # Bước 2: Cài đặt Wrangler
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      # Bước 3: Chạy lệnh deploy, sử dụng API Token đã lưu trong Secrets
+      - name: Deploy
+        run: wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
